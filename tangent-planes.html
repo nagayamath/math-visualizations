@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>二変数関数のグラフと接平面</title>
+
+  <!-- ライブラリ本体はCDNから取得するため，HTMLへの埋め込みは不要． -->
+  <script src="https://cdn.plot.ly/plotly-3.3.1.min.js" defer></script>
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['\\(', '\\)']] },
+      chtml: { scale: 1.05 }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" defer></script>
+
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 30px 20px 50px;
+      background: #f4f7fb;
+      color: #1b2940;
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+    }
+    main { max-width: 1400px; margin: auto; }
+    h1 { font-size: 27px; margin: 0 0 8px; }
+    .desc { color: #52647b; margin: 0 0 20px; line-height: 1.75; }
+    .legend { display: flex; gap: 17px; flex-wrap: wrap; margin-bottom: 22px; font-size: 14px; color: #4b5a70; }
+    .swatch { display: inline-block; width: 13px; height: 13px; margin-right: 5px; border-radius: 3px; vertical-align: middle; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
+    .card { min-width: 0; background: #fff; border: 1px solid #e2e8f1; border-radius: 16px; padding: 16px;
+            box-shadow: 0 3px 12px #19253b0c; }
+    .heading { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
+    .num { color: #1f5ea4; font-size: 21px; font-weight: 750; }
+    .equation { font-size: 19px; overflow-wrap: anywhere; }
+    .controls { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;
+                gap: 8px; padding: 3px 8px 6px; font-size: 14px; color: #334b68; }
+    .controls label { cursor: pointer; user-select: none; }
+    .controls input { width: 17px; height: 17px; vertical-align: middle; accent-color: #e4a44d; }
+    .plot { width: 100%; height: 410px; }
+    .plane { background: #fff7e9; color: #3c475a; border-radius: 8px; padding: 10px 12px;
+             line-height: 1.8; font-size: 15px; overflow-x: auto; }
+    .note { color: #617084; font-size: 13px; line-height: 1.6; margin: 10px 4px 0; }
+    .footer { color: #667991; font-size: 13px; line-height: 1.7; margin-top: 22px; }
+    @media (max-width: 800px) {
+      body { padding: 20px 10px 40px; }
+      h1 { font-size: 23px; }
+      .grid { grid-template-columns: 1fr; }
+      .plot { height: min(390px, 95vw); }
+      .card { padding: 13px; }
+      .equation { font-size: 17px; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <h1>二変数関数：6つの3Dグラフ</h1>
+  <p class="desc">ドラッグで曲面を回転，スクロールまたはピンチで拡大・縮小できます．
+    赤い点は指定点です．チェックボックスで接平面を表示・非表示にできます．</p>
+  <div class="legend">
+    <span><i class="swatch" style="background:#258a9f"></i>関数の曲面</span>
+    <span><i class="swatch" style="background:#f3b354"></i>接平面</span>
+    <span><i class="swatch" style="background:#d62e4c;border-radius:50%"></i>指定点</span>
+  </div>
+
+  <div class="grid">
+    <section class="card" data-id="1">
+      <div class="heading"><span class="num">(1)</span><span class="equation">\(f(x,y)=x^2+y^2\)</span></div>
+      <div class="controls"><span>指定点：\((1,1)\)</span><label><input type="checkbox" checked> 接平面を表示</label></div>
+      <div class="plot" id="plot1"></div>
+      <div class="plane"><strong>接平面：</strong>\(z=2x+2y-2\)</div>
+      <p class="note">上に開いた放物面．接平面は傾いている．</p>
+    </section>
+    <section class="card" data-id="2">
+      <div class="heading"><span class="num">(2)</span><span class="equation">\(f(x,y)=\sqrt{1-x^2-y^2}\)</span></div>
+      <div class="controls"><span>指定点：\((0,0)\)</span><label><input type="checkbox" checked> 接平面を表示</label></div>
+      <div class="plot" id="plot2"></div>
+      <div class="plane"><strong>接平面：</strong>\(z=1\)</div>
+      <p class="note">半径1の球の上半分．頂点の接平面は水平．</p>
+    </section>
+    <section class="card" data-id="3">
+      <div class="heading"><span class="num">(3)</span><span class="equation">\(f(x,y)=\dfrac{x}{y}\)</span></div>
+      <div class="controls"><span>指定点：\((2,1)\)</span><label><input type="checkbox" checked> 接平面を表示</label></div>
+      <div class="plot" id="plot3"></div>
+      <div class="plane"><strong>接平面：</strong>\(z=x-2y+2\)</div>
+      <p class="note">\(y=0\) に近づくと発散するため，\(y>0\) の範囲を表示．</p>
+    </section>
+    <section class="card" data-id="4">
+      <div class="heading"><span class="num">(4)</span><span class="equation">\(f(x,y)=\exp(-x^2-y^2)\)</span></div>
+      <div class="controls"><span>指定点：\((1,1)\)</span><label><input type="checkbox" checked> 接平面を表示</label></div>
+      <div class="plot" id="plot4"></div>
+      <div class="plane"><strong>接平面：</strong>\(z=e^{-2}\{1-2(x-1)-2(y-1)\}\)</div>
+      <p class="note">原点に山があり，外側に向かって滑らかに減衰．</p>
+    </section>
+    <section class="card" data-id="5">
+      <div class="heading"><span class="num">(5)</span><span class="equation">\(f(x,y)=1-\sqrt{x^2+y^2}\)</span></div>
+      <div class="controls"><span>指定点：\(\bigl(1/\sqrt2,\,1/\sqrt2\bigr)\)</span><label><input type="checkbox" checked> 接平面を表示</label></div>
+      <div class="plot" id="plot5"></div>
+      <div class="plane"><strong>接平面：</strong>\(z=1-\dfrac{x+y}{\sqrt2}\)</div>
+      <p class="note">下向きの円錐面．原点の頂点では微分不可能．</p>
+    </section>
+    <section class="card" data-id="6">
+      <div class="heading"><span class="num">(6)</span><span class="equation">\(f(x,y)=\log(x^2+y^2)\)</span></div>
+      <div class="controls"><span>指定点：\((1,2)\)</span><label><input type="checkbox" checked> 接平面を表示</label></div>
+      <div class="plot" id="plot6"></div>
+      <div class="plane"><strong>接平面：</strong>\(z=\log 5+\dfrac25(x-1)+\dfrac45(y-2)\)</div>
+      <p class="note">原点では未定義で，近づくと \(-\infty\) に発散する．</p>
+    </section>
+  </div>
+  <p class="footer">曲面は表示範囲を切り取っています．(2) は定義域を円盤内に制限し，(6) は原点付近を描画から除外しています．
+    描画と数式表示にはインターネット接続が必要です．</p>
+</main>
+
+<script>
+  // 各関数の定義，描画範囲，指定点とその偏微分係数．
+  const functions = [
+    { f: (x,y) => x*x + y*y,
+      range: [[-1.4,1.85], [-1.4,1.85]], p: [1,1], d: [2,2], half: [.58,.58] },
+    { f: (x,y) => x*x+y*y <= 1 ? Math.sqrt(1-x*x-y*y) : null,
+      range: [[-1,1], [-1,1]], p: [0,0], d: [0,0], half: [.42,.42] },
+    { f: (x,y) => x/y,
+      range: [[0,3.4], [.6,2.75]], p: [2,1], d: [1,-2], half: [.48,.28] },
+    { f: (x,y) => Math.exp(-x*x-y*y),
+      range: [[-1.75,1.75], [-1.75,1.75]], p: [1,1], d: [-2*Math.exp(-2),-2*Math.exp(-2)], half: [.56,.56] },
+    { f: (x,y) => 1-Math.hypot(x,y),
+      range: [[-1.6,1.6], [-1.6,1.6]], p: [1/Math.SQRT2,1/Math.SQRT2],
+      d: [-1/Math.SQRT2,-1/Math.SQRT2], half: [.51,.51] },
+    { f: (x,y) => x*x+y*y > .03 ? Math.log(x*x+y*y) : null,
+      range: [[-2.15,2.7], [-1.4,3.5]], p: [1,2], d: [2/5,4/5], half: [.7,.62] }
+  ];
+
+  // メッシュの座標はブラウザで生成する（巨大な座標配列をHTMLに保存しない）．
+  const linspace = (a,b,n) => Array.from({length:n}, (_,i) => a+(b-a)*i/(n-1));
+  function surface(fn, xr, yr, resolution) {
+    const x = linspace(...xr, resolution), y = linspace(...yr, resolution);
+    return { x, y, z: y.map(v => x.map(u => fn(u,v))) };
+  }
+
+  const camera = new Map();
+  const plots = new Set();
+  const light = {ambient:.75, diffuse:.65, roughness:.85};
+
+  async function draw(id) {
+    if (plots.has(id) || !window.Plotly) return;
+    plots.add(id);
+    const cfg = functions[id-1], card = document.querySelector(`[data-id="${id}"]`);
+    const el = document.getElementById(`plot${id}`);
+    const [x0,y0] = cfg.p, [dx,dy] = cfg.d, z0 = cfg.f(x0,y0);
+    const plane = (x,y) => z0 + dx*(x-x0) + dy*(y-y0);
+    const [hx,hy] = cfg.half;
+
+    const traces = [
+      { ...surface(cfg.f, ...cfg.range, 54), type:'surface', name:'曲面',
+        colorscale:'Viridis', showscale:false, opacity:.97, lighting:light,
+        hovertemplate:'x=%{x:.2f}<br>y=%{y:.2f}<br>z=%{z:.2f}<extra>曲面</extra>' },
+      { ...surface(plane, [x0-hx,x0+hx], [y0-hy,y0+hy], 11), type:'surface', name:'接平面',
+        colorscale:[[0,'#f3b354'],[1,'#f3b354']], surfacecolor:Array.from({length:11},()=>Array(11).fill(0)),
+        opacity:.73, showscale:false, visible:card.querySelector('input').checked,
+        hovertemplate:'z=%{z:.2f}<extra>接平面</extra>' },
+      { type:'scatter3d', name:'指定点', mode:'markers',
+        x:[x0], y:[y0], z:[z0], marker:{size:6.5,color:'#d81e43',line:{color:'white',width:2}},
+        hovertemplate:`(${x0.toFixed(3)}, ${y0.toFixed(3)}, ${z0.toFixed(3)})<extra>指定点</extra>` }
+    ];
+
+    try {
+      await Plotly.newPlot(el, traces, {
+        margin:{l:0,r:0,b:0,t:0}, showlegend:false, paper_bgcolor:'rgba(0,0,0,0)',
+        scene:{
+          xaxis:{title:'x',backgroundcolor:'#f8fafc',gridcolor:'#dce5ee'},
+          yaxis:{title:'y',backgroundcolor:'#f8fafc',gridcolor:'#dce5ee'},
+          zaxis:{title:'z',backgroundcolor:'#f8fafc',gridcolor:'#dce5ee'},
+          camera:camera.get(id) ?? {eye:{x:1.5,y:1.55,z:1.07}},
+          aspectmode:'cube'
+        }
+      }, {responsive:true,displaylogo:false});
+      el.on('plotly_relayout', event => {
+        if (event['scene.camera']) camera.set(id,event['scene.camera']);
+      });
+    } catch (e) {
+      plots.delete(id);
+      el.textContent = '3Dグラフを描画できませんでした．ネットワーク接続を確認してください．';
+      console.error(e);
+    }
+  }
+
+  // iPadでWebGLコンテキストが増えすぎないよう，画面外のグラフを解放する．
+  window.addEventListener('load', () => {
+    if (!window.Plotly) {
+      document.querySelectorAll('.plot').forEach(el => {
+        el.textContent = 'Plotlyを読み込めませんでした．インターネット接続を確認してください．';
+      });
+      return;
+    }
+    document.querySelectorAll('.card').forEach(card => {
+      const id = Number(card.dataset.id);
+      card.querySelector('input').addEventListener('change', e => {
+        if (plots.has(id)) Plotly.restyle(`plot${id}`, {visible:e.target.checked}, [1]);
+      });
+    });
+    if (!('IntersectionObserver' in window)) {
+      functions.forEach((_,i) => draw(i+1));
+      return;
+    }
+    const observer = new IntersectionObserver(entries => {
+      for (const entry of entries) {
+        const id = Number(entry.target.dataset.id);
+        if (entry.isIntersecting) {
+          draw(id);
+        } else if (plots.has(id)) {
+          const el = document.getElementById(`plot${id}`);
+          // DOM外に出たときだけ破棄．スワイプ操作時の視点はできる限り保存．
+          if (el.layout?.scene?.camera) camera.set(id,el.layout.scene.camera);
+          Plotly.purge(el);
+          plots.delete(id);
+        }
+      }
+    }, {rootMargin:'180px 0px 180px 0px'});
+    document.querySelectorAll('.card').forEach(card => observer.observe(card));
+  });
+</script>
+</body>
+</html>
