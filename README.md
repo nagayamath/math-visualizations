@@ -1,10 +1,10 @@
 # 数学の可視化教材
 
-解析学・線形代数などの授業で使用する，インタラクティブな可視化教材です．PCやiPadのブラウザから閲覧・操作できます．
+インタラクティブな可視化教材です．PC や iPad のブラウザから閲覧・操作できます．
 
 ## 教材を見る
 
-**[GitHub Pagesで教材を開く](https://nagayamath.github.io/math-visualizations/)**
+**[GitHub Pages で教材を開く](https://nagayamath.github.io/math-visualizations/)**
 
 ## 教材一覧
 
