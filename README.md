@@ -4,7 +4,7 @@
 
 ## 教材を見る
 
-**[GitHub Pagesで教材を開く](https://nagayamath/math-visualizations/)**
+**[GitHub Pagesで教材を開く](https://nagayamath.github.io/math-visualizations/)**
 
 ## 教材一覧
 
