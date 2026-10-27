@@ -10,7 +10,7 @@
 
 | 教材 | 内容 |
 | --- | --- |
-| [二変数関数と接平面](https://YOUR_USERNAME.github.io/YOUR_REPOSITORY/tangent-planes.html) | 6つの二変数関数と接平面を3Dで可視化．回転・拡大縮小に対応． |
+| [二変数関数と接平面](https://nagayamath.github.io/math-visualizations/tangent-planes.html) | 6つの二変数関数と接平面を3Dで可視化．回転・拡大縮小に対応． |
 
 ## ファイル構成
 
