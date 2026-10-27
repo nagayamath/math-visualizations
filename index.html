@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>数学の可視化教材</title>
+  <style>
+    :root { font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif; color: #1e293b; background: #f8fafc; }
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    main { max-width: 760px; margin: 0 auto; padding: 64px 24px; }
+    h1 { font-size: clamp(1.7rem, 4vw, 2.25rem); letter-spacing: .01em; margin: 0 0 12px; }
+    .intro { color: #64748b; line-height: 1.8; margin: 0 0 36px; }
+    .card { display: block; padding: 24px 28px; color: inherit; background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; box-shadow: 0 3px 12px rgba(15, 23, 42, .035); text-decoration: none; transition: border-color .15s, box-shadow .15s; }
+    .card:hover, .card:focus-visible { border-color: #2563eb; box-shadow: 0 5px 18px rgba(37,99,235,.08); outline-offset: 4px; }
+    .card h2 { margin: 0 0 10px; font-size: 1.17rem; }
+    .card p { margin: 0; color: #64748b; font-size: .95rem; line-height: 1.75; }
+    .arrow { color: #2563eb; margin-left: 5px; }
+    footer { color: #94a3b8; font-size: .82rem; margin-top: 32px; }
+    @media (max-width: 500px) { main { padding: 42px 18px; } .card { padding: 20px; } }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>数学の可視化教材</h1>
+    <p class="intro">授業で使用するインタラクティブな可視化教材です．項目を選択すると，グラフを表示できます．</p>
+    <nav aria-label="教材一覧">
+      <a class="card" href="./tangent-planes.html">
+        <h2>二変数関数と接平面 <span class="arrow" aria-hidden="true">↗</span></h2>
+        <p>6つの関数のグラフと，指定された点における接平面を3Dで表示します．ドラッグで回転し，ピンチ操作で拡大・縮小できます．</p>
+      </a>
+    </nav>
+    <footer>数学教材 · 3D visualization</footer>
+  </main>
+</body>
+</html>
